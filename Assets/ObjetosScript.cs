@@ -6,13 +6,17 @@ public class ObjetosScript : MonoBehaviour
 {
     public float botonIzquierdo;
     public float botonDerecho;
-    public int currentIndex = 0;
-    public GameObject[] assets;
+    public int currentObjectIndex = 0;
+    public GameObject[] objetos;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        DeactivateAllObjects();
+        if (objetos.Length > 0)
+        {
+            objetos[0].SetActive(true);
+        }
     }
 
     // Update is called once per frame
@@ -20,29 +24,45 @@ public class ObjetosScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            ShowPreviousAsset();
+            MostrarSiguienteAsset();
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            ShowNextAsset();
+            MostrarAnteriorAsset();
         }
-
-        
     }
-    void ShowNextAsset()
+
+    public void MostrarSiguienteAsset()
     {
-        assets[currentIndex].SetActive(false);
-     currentIndex =   (currentIndex + 1) % assets.Length;
-        assets[currentIndex].SetActive(true);
+        currentObjectIndex++;
+        if (currentObjectIndex >= objetos.Length)
+            {
+            currentObjectIndex = 0;
+        }
+        DeactivateAllObjects();
+        objetos[currentObjectIndex].SetActive(true);
+
 
 
     }
 
-    void ShowPreviousAsset()
+    public  void MostrarAnteriorAsset()
     {
-        assets[currentIndex].SetActive(false);
-        currentIndex = (currentIndex - 1) % assets.Length;
-        assets[currentIndex].SetActive(true);
+        currentObjectIndex--;
+        if (currentObjectIndex < 0)
+            {
+            currentObjectIndex - objetos.Length - 1;
+        }
+        DeactivateAllObjects();
+        objetos[currentObjectIndex].SetActive(true);
+
     }
 
+    void DeactivateAllObjects()
+    {
+        foreach (GameObject g in objetos)
+        {
+            g.SetActive(false);
+        }
+    }
 }
